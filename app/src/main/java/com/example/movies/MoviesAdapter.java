@@ -1,5 +1,6 @@
 package com.example.movies;
 
+import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,10 +25,17 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MovieViewH
         notifyDataSetChanged();
     }
 
+    private OnReachEndListener onReachEndListener;
+
+    public void setOnReachEndListener(OnReachEndListener onReachEndListener) {
+        this.onReachEndListener = onReachEndListener;
+    }
+
     @NonNull
     @Override
     public MovieViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext())
+        View view = LayoutInflater
+                .from(parent.getContext())
                 .inflate(
                         R.layout.movie_item,
                         parent,
@@ -42,16 +50,20 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MovieViewH
                 .load(movie.getPosterUrl())
                 .into(holder.imageViewPoster);
         double rating = movie.getRating();
-        int colorId;
-        if (rating < 4.5) colorId = R.drawable.circle_red;
-        else if (rating < 7) colorId = R.drawable.circle_orange;
-        else colorId = R.drawable.circle_green;
-        holder.textViewRating.setBackground(
-                ContextCompat.getDrawable(
-                        holder.itemView.getContext(),
-                        colorId));
+
+        int backgroundDrawableId;
+        if (rating < 4.5) backgroundDrawableId = R.drawable.circle_red;
+        else if (rating < 7) backgroundDrawableId = R.drawable.circle_orange;
+        else backgroundDrawableId = R.drawable.circle_green;
+        Drawable background = ContextCompat
+                .getDrawable(holder.itemView.getContext(), backgroundDrawableId);
+        holder.textViewRating.setBackground(background);
 
         holder.textViewRating.setText(String.valueOf(movie.getRating()));
+
+        if (position == movies.size() - 1 && onReachEndListener != null) {
+            onReachEndListener.onReachEnd();
+        }
     }
 
     @Override
@@ -69,5 +81,10 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MovieViewH
             imageViewPoster = itemView.findViewById(R.id.imageViewPoster);
             textViewRating = itemView.findViewById(R.id.textViewRating);
         }
+    }
+
+    interface OnReachEndListener {
+
+        void onReachEnd();
     }
 }

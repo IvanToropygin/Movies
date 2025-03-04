@@ -25,12 +25,22 @@ public class MainActivity extends AppCompatActivity {
         recyclerViewMovies.setAdapter(moviesAdapter);
 
         viewModel = new ViewModelProvider(this).get(MainViewModel.class);
-        viewModel.getMovies().observe(this, new Observer<List<Movie>>() {
+        viewModel.getMovies()
+                .observe(
+                        this,
+                        new Observer<List<Movie>>() {
+                            @Override
+                            public void onChanged(List<Movie> movies) {
+                                moviesAdapter.setMovies(movies);
+                            }
+                        });
+        viewModel.loadMovies();
+
+        moviesAdapter.setOnReachEndListener(new MoviesAdapter.OnReachEndListener() {
             @Override
-            public void onChanged(List<Movie> movies) {
-                moviesAdapter.setMovies(movies);
+            public void onReachEnd() {
+                viewModel.loadMovies();
             }
         });
-        viewModel.loadMovies();
     }
 }
