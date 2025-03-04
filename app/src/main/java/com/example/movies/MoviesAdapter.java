@@ -7,6 +7,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
@@ -40,6 +41,15 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MovieViewH
         Glide.with(holder.itemView)
                 .load(movie.getPosterUrl())
                 .into(holder.imageViewPoster);
+        double rating = movie.getRating();
+        int colorId;
+        if (rating < 4.5) colorId = R.drawable.circle_red;
+        else if (rating < 7) colorId = R.drawable.circle_orange;
+        else colorId = R.drawable.circle_green;
+        holder.textViewRating.setBackground(
+                ContextCompat.getDrawable(
+                        holder.itemView.getContext(),
+                        colorId));
 
         holder.textViewRating.setText(String.valueOf(movie.getRating()));
     }
