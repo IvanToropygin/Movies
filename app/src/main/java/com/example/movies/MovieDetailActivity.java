@@ -10,6 +10,7 @@ import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 
@@ -25,13 +26,17 @@ public class MovieDetailActivity extends AppCompatActivity {
     private ImageView imageViewPoster;
     private TextView textViewTitle;
     private TextView textViewYear;
-    private TextView textViewDescription;
+    private TextView textViewCountry;
+    private RecyclerView recyclerViewTrailers;
+    private TrailersAdapter trailersAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_movie_detail);
         initViews();
+        trailersAdapter = new TrailersAdapter();
+        recyclerViewTrailers.setAdapter(trailersAdapter);
 
         Movie movie = (Movie) getIntent().getSerializableExtra(EXTRA_MOVIE_KEY);
 
@@ -41,7 +46,7 @@ public class MovieDetailActivity extends AppCompatActivity {
 
         textViewTitle.setText(movie.getName());
         textViewYear.setText(String.valueOf(movie.getYear()));
-        textViewDescription.setText(movie.getCountries().toString());
+        textViewCountry.setText(movie.getCountries().toString());
 
         viewModel = new ViewModelProvider(this).get(MovieDetailViewModel.class);
         viewModel.loadTrailers(movie.getId());
@@ -49,6 +54,7 @@ public class MovieDetailActivity extends AppCompatActivity {
             @Override
             public void onChanged(List<Trailer> trailers) {
                 Log.d(TAG, trailers.toString());
+                trailersAdapter.setTrailers(trailers);
             }
         });
     }
@@ -57,7 +63,8 @@ public class MovieDetailActivity extends AppCompatActivity {
         imageViewPoster = findViewById(R.id.imageViewPoster);
         textViewTitle = findViewById(R.id.textViewTitle);
         textViewYear = findViewById(R.id.textViewYear);
-        textViewDescription = findViewById(R.id.textViewDescription);
+        textViewCountry = findViewById(R.id.textViewCountry);
+        recyclerViewTrailers = findViewById(R.id.recyclerViewTrailers);
     }
 
     public static Intent newIntent(Context context, Movie movie) {
