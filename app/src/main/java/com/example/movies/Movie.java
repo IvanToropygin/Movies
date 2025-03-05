@@ -2,9 +2,10 @@ package com.example.movies;
 
 import com.google.gson.annotations.SerializedName;
 
+import java.io.Serializable;
 import java.util.List;
 
-public class Movie {
+public class Movie implements Serializable {
 
     @SerializedName("kinopoiskId") private int id;
     @SerializedName("nameRu") private String name;

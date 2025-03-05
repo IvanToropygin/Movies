@@ -31,6 +31,12 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MovieViewH
         this.onReachEndListener = onReachEndListener;
     }
 
+    private OnMovieClickListener onMovieClickListener;
+
+    public void setOnItemClickListener(OnMovieClickListener onMovieClickListener) {
+        this.onMovieClickListener = onMovieClickListener;
+    }
+
     @NonNull
     @Override
     public MovieViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -64,6 +70,15 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MovieViewH
         if (position >= movies.size() - 10 && onReachEndListener != null) {
             onReachEndListener.onReachEnd();
         }
+
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(onMovieClickListener != null) {
+                    onMovieClickListener.onItemClick(movie);
+                }
+            }
+        });
     }
 
     @Override
@@ -86,5 +101,10 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MovieViewH
     interface OnReachEndListener {
 
         void onReachEnd();
+    }
+
+    interface OnMovieClickListener {
+
+        void onItemClick(Movie movie);
     }
 }
