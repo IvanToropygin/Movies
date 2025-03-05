@@ -3,16 +3,24 @@ package com.example.movies;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.bumptech.glide.Glide;
+
+import java.util.List;
 
 public class MovieDetailActivity extends AppCompatActivity {
 
     private static final String EXTRA_MOVIE_KEY = "movie";
+    private static final String TAG = "MovieDetailActivity";
+
+    private MovieDetailViewModel viewModel;
 
     private ImageView imageViewPoster;
     private TextView textViewTitle;
@@ -27,7 +35,6 @@ public class MovieDetailActivity extends AppCompatActivity {
 
         Movie movie = (Movie) getIntent().getSerializableExtra(EXTRA_MOVIE_KEY);
 
-        assert movie != null;
         Glide.with(this)
                 .load(movie.getPosterUrl())
                 .into(imageViewPoster);
@@ -35,6 +42,15 @@ public class MovieDetailActivity extends AppCompatActivity {
         textViewTitle.setText(movie.getName());
         textViewYear.setText(String.valueOf(movie.getYear()));
         textViewDescription.setText(movie.getCountries().toString());
+
+        viewModel = new ViewModelProvider(this).get(MovieDetailViewModel.class);
+        viewModel.loadTrailers(movie.getId());
+        viewModel.getTrailers().observe(this, new Observer<List<Trailer>>() {
+            @Override
+            public void onChanged(List<Trailer> trailers) {
+                Log.d(TAG, trailers.toString());
+            }
+        });
     }
 
     private void initViews() {
