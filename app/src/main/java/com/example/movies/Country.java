@@ -6,8 +6,7 @@ import java.io.Serializable;
 
 public class Country implements Serializable {
 
-    @SerializedName("country")
-    private String country;
+    @SerializedName("country") private String country;
 
     public Country(String country) {
         this.country = country;
