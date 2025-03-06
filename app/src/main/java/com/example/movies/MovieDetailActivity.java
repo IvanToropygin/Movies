@@ -25,19 +25,29 @@ public class MovieDetailActivity extends AppCompatActivity {
     private MovieDetailViewModel viewModel;
 
     private ImageView imageViewPoster;
+
     private TextView textViewTitle;
     private TextView textViewYear;
     private TextView textViewCountry;
+
     private RecyclerView recyclerViewTrailers;
     private TrailersAdapter trailersAdapter;
+
+    private RecyclerView recyclerViewReviews;
+    private ReviewsAdapter reviewsAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_movie_detail);
+
         initViews();
+
         trailersAdapter = new TrailersAdapter();
         recyclerViewTrailers.setAdapter(trailersAdapter);
+
+        reviewsAdapter = new ReviewsAdapter();
+        recyclerViewReviews.setAdapter(reviewsAdapter);
 
         Movie movie = (Movie) getIntent().getSerializableExtra(EXTRA_MOVIE_KEY);
 
@@ -74,6 +84,7 @@ public class MovieDetailActivity extends AppCompatActivity {
             @Override
             public void onChanged(List<Review> reviews) {
                 Log.d(TAG, reviews.toString());
+                reviewsAdapter.setReviews(reviews);
             }
         });
     }
@@ -84,6 +95,7 @@ public class MovieDetailActivity extends AppCompatActivity {
         textViewYear = findViewById(R.id.textViewYear);
         textViewCountry = findViewById(R.id.textViewCountry);
         recyclerViewTrailers = findViewById(R.id.recyclerViewTrailers);
+        recyclerViewReviews = findViewById(R.id.recyclerViewReviews);
     }
 
     public static Intent newIntent(Context context, Movie movie) {

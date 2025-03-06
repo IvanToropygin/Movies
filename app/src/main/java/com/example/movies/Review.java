@@ -7,13 +7,13 @@ public class Review {
     @SerializedName("type") private String type;
     @SerializedName("author") private String author;
     @SerializedName("title") private String title;
-    @SerializedName("description") private String description;
+    @SerializedName("description") private String content;
 
-    public Review(String type, String author, String title, String description) {
+    public Review(String type, String author, String title, String content) {
         this.type = type;
         this.author = author;
         this.title = title;
-        this.description = description;
+        this.content = content;
     }
 
     public String getType() {
@@ -28,8 +28,8 @@ public class Review {
         return title;
     }
 
-    public String getDescription() {
-        return description;
+    public String getContent() {
+        return content;
     }
 
     @Override
@@ -38,7 +38,7 @@ public class Review {
                 "type='" + type + '\'' +
                 ", author='" + author + '\'' +
                 ", title='" + title + '\'' +
-                ", description='" + description + '\'' +
+                ", description='" + content + '\'' +
                 '}';
     }
 }
