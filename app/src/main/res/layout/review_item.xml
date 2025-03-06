@@ -3,48 +3,46 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     android:layout_margin="8dp"
     app:cardCornerRadius="8dp"
+    app:cardElevation="4dp"
     app:cardUseCompatPadding="true">
 
     <LinearLayout
         android:id="@+id/linearLayoutReviewContainer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:alpha="0.75"
         android:orientation="vertical"
-        android:padding="8dp"
-        tools:background="@android:color/holo_red_light">
+        android:alpha="0.75"
+        android:padding="16dp">
 
         <TextView
             android:id="@+id/textViewReviewTitle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textAlignment="center"
             android:textColor="@color/white"
             android:textSize="14sp"
             android:textStyle="bold"
-            tools:text="@tools:sample/lorem" />
+            tools:text="Author Name" />
 
         <TextView
             android:id="@+id/textViewReviewAuthor"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="4dp"
+            android:layout_marginTop="8dp"
             android:textColor="@color/white"
             android:textSize="14sp"
-            android:textStyle="bold"
-            tools:text="@tools:sample/lorem" />
+            tools:text="@tools:sample/lorem/random" />
 
         <TextView
             android:id="@+id/textViewReviewContent"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="4dp"
+            android:layout_marginTop="8dp"
             android:textColor="@color/white"
-            android:textSize="14sp"
+            android:textSize="12sp"
             android:textStyle="italic"
-            tools:text="@tools:sample/lorem/random" />
+            tools:text="2023-08-15" />
     </LinearLayout>
 </androidx.cardview.widget.CardView>
