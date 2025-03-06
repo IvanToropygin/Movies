@@ -7,9 +7,12 @@ import retrofit2.http.Query;
 
 public interface ApiService {
 
-    @GET("films?order=RATING&type=ALL&ratingTo=9")
+    @GET("films/collections?type=TOP_POPULAR_MOVIES")
     Single<MovieResponse> loadMovies(@Query("page") int page);
 
     @GET("films/{kinopoiskId}/videos")
     Single<TrailersResponse> loadTrailers(@Path("kinopoiskId") long kinopoiskId);
+
+    @GET("films/{kinopoiskId}/reviews?order=DATE_DESC")
+    Single<ReviewsResponse> loadReviews(@Path("kinopoiskId") long kinopoiskId);
 }

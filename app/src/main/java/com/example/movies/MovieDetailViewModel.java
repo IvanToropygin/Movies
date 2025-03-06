@@ -8,6 +8,7 @@ import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
+import java.util.Collections;
 import java.util.List;
 
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
@@ -22,10 +23,12 @@ public class MovieDetailViewModel extends AndroidViewModel {
     private static final String TAG = "MovieDetailViewModel";
 
     private final MutableLiveData<List<Trailer>> trailers = new MutableLiveData<>();
-
     public LiveData<List<Trailer>> getTrailers() {
         return trailers;
     }
+
+    private final MutableLiveData<List<Review>> reviews = new MutableLiveData<>();
+    public LiveData<List<Review>> getReviews() { return reviews; }
 
     private final CompositeDisposable compositeDisposable = new CompositeDisposable();
 
@@ -46,8 +49,33 @@ public class MovieDetailViewModel extends AndroidViewModel {
                 .subscribe(new Consumer<List<Trailer>>() {
                     @Override
                     public void accept(List<Trailer> trailersList) throws Throwable {
-                        Log.d(TAG, trailers.toString());
+                        Log.d(TAG, trailersList.toString());
                         trailers.setValue(trailersList);
+                    }
+                }, new Consumer<Throwable>() {
+                    @Override
+                    public void accept(Throwable throwable) throws Throwable {
+                        Log.d(TAG, throwable.toString());
+                    }
+                });
+        compositeDisposable.add(disposable);
+    }
+
+    public void loadReviews(long kinopoiskId) {
+        Disposable disposable = ApiFactory.apiService.loadReviews(kinopoiskId)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .map(new Function<ReviewsResponse, List<Review>>() {
+                    @Override
+                    public List<Review> apply(ReviewsResponse reviewsResponse) throws Throwable {
+                        return reviewsResponse.getReviews();
+                    }
+                })
+                .subscribe(new Consumer<List<Review>>() {
+                    @Override
+                    public void accept(List<Review> reviewsList) throws Throwable {
+                        Log.d(TAG, reviewsList.toString());
+                        reviews.setValue(reviewsList);
                     }
                 }, new Consumer<Throwable>() {
                     @Override
