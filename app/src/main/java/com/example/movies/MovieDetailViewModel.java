@@ -8,7 +8,6 @@ import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
-import java.util.Collections;
 import java.util.List;
 
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
@@ -23,17 +22,28 @@ public class MovieDetailViewModel extends AndroidViewModel {
     private static final String TAG = "MovieDetailViewModel";
 
     private final MutableLiveData<List<Trailer>> trailers = new MutableLiveData<>();
+
     public LiveData<List<Trailer>> getTrailers() {
         return trailers;
     }
 
     private final MutableLiveData<List<Review>> reviews = new MutableLiveData<>();
-    public LiveData<List<Review>> getReviews() { return reviews; }
+
+    public LiveData<List<Review>> getReviews() {
+        return reviews;
+    }
 
     private final CompositeDisposable compositeDisposable = new CompositeDisposable();
 
+    private final MovieDao movieDao;
+
     public MovieDetailViewModel(@NonNull Application application) {
         super(application);
+        movieDao = MovieDatabase.getInstance(application).movieDao();
+    }
+
+    public LiveData<Movie> getFavouriteMovie(long kinopoiskId) {
+        return movieDao.getFavouriteMovieById(kinopoiskId);
     }
 
     public void loadTrailers(long kinopoiskId) {
@@ -83,6 +93,20 @@ public class MovieDetailViewModel extends AndroidViewModel {
                         Log.d(TAG, throwable.toString());
                     }
                 });
+        compositeDisposable.add(disposable);
+    }
+
+    public void insertMovieToFavourite(Movie movie) {
+        Disposable disposable = movieDao.insertMovie(movie)
+                .subscribeOn(Schedulers.io())
+                .subscribe();
+        compositeDisposable.add(disposable);
+    }
+
+    public void deleteMovieFromFavourite(long kinopoiskId) {
+        Disposable disposable = movieDao.removeMovie(kinopoiskId)
+                .subscribeOn(Schedulers.io())
+                .subscribe();
         compositeDisposable.add(disposable);
     }
 
