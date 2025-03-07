@@ -3,4 +3,5 @@
     <string name="poster_image">poster image</string>
     <string name="play_trailer">play trailer</string>
     <string name="favourite_button">favourite button</string>
+    <string name="favourites">Избранное</string>
 </resources>

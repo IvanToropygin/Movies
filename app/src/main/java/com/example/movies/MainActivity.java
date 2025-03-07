@@ -1,12 +1,13 @@
 package com.example.movies;
 
-import static com.example.movies.MovieDetailActivity.newIntent;
-
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ProgressBar;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
@@ -65,9 +66,23 @@ public class MainActivity extends AppCompatActivity {
         moviesAdapter.setOnItemClickListener(new MoviesAdapter.OnMovieClickListener() {
             @Override
             public void onItemClick(Movie movie) {
-                Intent intent = newIntent(MainActivity.this, movie);
+                Intent intent = MovieDetailActivity.newIntent(MainActivity.this, movie);
                 startActivity(intent);
             }
         });
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.main_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        if(item.getItemId() == R.id.itemFavouriteMovies) {
+            startActivity(FavouriteMoviesActivity.newIntent(this));
+        }
+        return super.onOptionsItemSelected(item);
     }
 }
